@@ -2,13 +2,27 @@ import React, { useEffect, useState } from "react";
 
 function App() {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("https://dummyjson.com/products")
-      .then((res) => res.json())
-      .then((result) => setData(result))
-      .catch((err) => console.error(err));
+    const fetchData = async () => {
+      try {
+        const response = await fetch("https://dummyjson.com/products");
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        setError("Failed to fetch data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div style={{ padding: "20px" }}>
