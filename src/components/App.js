@@ -1,13 +1,21 @@
+import React, { useEffect, useState } from "react";
 
-import React from "react";
-import './../styles/App.css';
+function App() {
+  const [data, setData] = useState(null);
 
-const App = () => {
+  useEffect(() => {
+    fetch("https://dummyjson.com/products")
+      .then((res) => res.json())
+      .then((result) => setData(result))
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
-    <div>
-        {/* Do not remove the main div */}
+    <div style={{ padding: "20px" }}>
+      <h2>DataFetcher</h2>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
